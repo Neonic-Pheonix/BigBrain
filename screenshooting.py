@@ -1,5 +1,6 @@
 import tkinter
 from PIL import Image, ImageTk, ImageGrab, ImageDraw
+import pyperclip
 
 
 start_x = 0
@@ -27,9 +28,7 @@ def on_move_press(event):
 def on_button_release(event):
     global start_x, curX, start_y, curY, selection_rect, root
     selection = pilImage.crop(box=(start_x, start_y, curX, curY))
-    root.clipboard_clear()
-    root.clipboard_append("str(type(selection))")
-    print(root.clipboard_get())
+    pyperclip.copy('type of the image: ' + str(type(selection)))
 
     event.widget.unbind("<B1-Motion>")
     event.widget.unbind("<ButtonPress-1>")
@@ -41,6 +40,7 @@ def on_button_release(event):
 
 root = tkinter.Tk()
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+print(w, h)
 root.overrideredirect(1)
 root.geometry("%dx%d+0+0" % (w, h))
 root.focus_set()    
@@ -53,6 +53,7 @@ canvas.bind("<B1-Motion>", on_move_press)
 canvas.bind("<ButtonRelease-1>", on_button_release)
 pilImage = ImageGrab.grab()
 imgWidth, imgHeight = pilImage.size
+print(imgWidth, imgHeight)
 if imgWidth > w or imgHeight > h:
     ratio = min(w/imgWidth, h/imgHeight)
     imgWidth = int(imgWidth*ratio)
@@ -61,4 +62,3 @@ if imgWidth > w or imgHeight > h:
 image = ImageTk.PhotoImage(pilImage)
 imagesprite = canvas.create_image(w/2,h/2,image=image)
 root.mainloop()
-
