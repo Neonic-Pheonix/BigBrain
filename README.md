@@ -1,4 +1,4 @@
-# Project-Big-Brain
+# BigBrain
 
 This is tool for getting the text string out of a snippet of the screen.
 
