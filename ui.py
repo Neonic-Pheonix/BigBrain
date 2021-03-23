@@ -1,12 +1,15 @@
-import tkinter
-from PIL import Image, ImageTk, ImageGrab, ImageDraw
 import pyperclip
+from tkinter import Tk, Canvas
+from PIL import Image, ImageTk, ImageGrab
 
 
 class screen:
     def __init__(self, image_selected_callback):
+        # taking the screenshot
+        self.pilImage = ImageGrab.grab()
+
         # initialising the GUI window
-        self.root = tkinter.Tk()
+        self.root = Tk()
         self.root.attributes("-fullscreen", True)
         self.root.overrideredirect(1)
         self.root.resizable(0, 0)
@@ -16,24 +19,17 @@ class screen:
 
         # initializing the canvas for the screenshot to be displayed on
         w, h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
-        self.canvas = tkinter.Canvas(self.root,width=w,height=h,highlightthickness=0)
+        self.canvas = Canvas(self.root,width=w,height=h,highlightthickness=0)
         self.canvas.pack()
         self.canvas.configure(background='black')
         self.canvas.bind("<ButtonPress-1>", self.on_button_press)
         self.canvas.bind("<B1-Motion>", self.on_move_press)
         self.canvas.bind("<ButtonRelease-1>", lambda event, callback=image_selected_callback: self.on_button_release(event, callback))
 
-        # taking the screenshot
-        self.pilImage = ImageGrab.grab()
-        # resizing the image if it is too big
-        imgWidth, imgHeight = self.pilImage.size
-        if imgWidth > w or imgHeight > h:
-            ratio = min(w/imgWidth, h/imgHeight)
-            imgWidth = int(imgWidth*ratio)
-            imgHeight = int(imgHeight*ratio)
-            self.pilImage = self.pilImage.resize((imgWidth,imgHeight), Image.ANTIALIAS)
+        # displaying the screenshot
         image = ImageTk.PhotoImage(self.pilImage)
-        imagesprite = self.canvas.create_image(w/2,h/2,image=image)
+        self.canvas.create_image(w/2,h/2,image=image)
+        self.canvas.create_rectangle(0,0,w,h, fill="red", stipple='gray25')
         self.root.mainloop()
 
     def on_button_press(self, event):
@@ -54,16 +50,21 @@ class screen:
         self.canvas.coords(self.selection_rect, self.start_x, self.start_y, self.curX, self.curY)    
 
     def on_button_release(self, event, callback):
-        # cropping the screenshot
-        selection = self.pilImage.crop(box=(self.start_x, self.start_y, self.curX, self.curY))
-        pyperclip.copy('type of the image: ' + str(type(selection)))
+        # hiding the window
+        self.root.withdraw()
 
         # undinbing eventhadlers for the mouse
         self.root.unbind("<B1-Motion>")
         self.root.unbind("<ButtonPress-1>")
         self.root.unbind("<ButtonRelease-1>")
-        # hiding the window
-        self.root.withdraw()
         self.root.quit()
+
+        # cropping the screenshot
+        if(self.start_x > self.curX):
+            self.start_x, self.curX = self.curX, self.start_x
+        if(self.start_y > self.curY):
+            self.start_y, self.curY = self.curY, self.start_y
+        selection = self.pilImage.crop(box=(self.start_x, self.start_y, self.curX, self.curY))
         
-        callback(Image.Image.getdata(selection))
+        recognized_text = callback(Image.Image.getdata(selection))
+        pyperclip.copy(recognized_text)
