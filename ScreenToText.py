@@ -1,8 +1,8 @@
 import pyperclip
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'Tesseract\\tesseract.exe'
 from tkinter import Tk, Canvas
-from PIL import Image, ImageTk, ImageGrab
+from PIL import ImageGrab, ImageTk
 
 
 class app:
@@ -14,7 +14,6 @@ class app:
         self.root = Tk()
         self.root.attributes("-fullscreen", True)
         self.root.overrideredirect(1)
-        self.root.resizable(0, 0)
         self.root.focus_set()
         # making Esc key quit the program
         self.root.bind("<Escape>", lambda e: (e.widget.withdraw(), e.widget.quit()))
