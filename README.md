@@ -35,6 +35,8 @@ If possible, leaving some padding around the text area can be helpful.
 The application is set to recognise texts in the English language only.
 To change this you can follow the link https://github.com/UB-Mannheim/tesseract/wiki,
 select either of the two download options:
-![sorry, image not found](https://github.com/Gordei-Kuznetsov/Big-Brain/blob/main/readme_image.png?raw=true)
+
+![sorry, image not found]https://github.com/Neonic-Pheonix/BigBrain/blob/main/readme_image.png?raw=true)
+
 Then open the downloaded installer and follow the steps in it to select the languages and scripts you want the app to recognize.
 After that, replace the 'Tesseract' folder in the directory of the application with the 'Tesseract' folder that was installed by the wizard. This will essentially modify the configuration of the library.
