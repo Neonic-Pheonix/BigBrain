@@ -74,7 +74,8 @@ class app:
         
         # passing the image for text recognition
         recognized_text = pytesseract.image_to_string(selection)
-        pyperclip.copy(recognized_text)
+        if recognized_text != "":
+            pyperclip.copy(recognized_text)
 
 
 app()
