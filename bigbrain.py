@@ -34,8 +34,8 @@ class app:
         self.root.bind("<Escape>", lambda e: (e.widget.withdraw(), e.widget.quit()))
 
         # Get a client for the computer vision service
-        self.cog_key = 'COG_KEY'
-        self.cog_endpoint = 'COG_ENDPOINT'
+        self.cog_key = '382452f3db7b463088bc3b452f408116'
+        self.cog_endpoint = 'https://bigbrainocr.cognitiveservices.azure.com/'
         self.computervision_client = ComputerVisionClient(self.cog_endpoint, CognitiveServicesCredentials(self.cog_key))
 
         self.root.mainloop()
